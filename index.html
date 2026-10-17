@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gráfica Arte Digital | Campaña de Clausura Escolar</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#0A1931',       // Azul marino profundo principal
+              navyLight: '#152C4E',  // Azul secundario
+              fuchsia: '#E6007E',    // Fucsia vibrante de alta conversión
+              fuchsiaHover: '#C9006E',
+              green: '#10B981',      // Verde sutil / WhatsApp confianza
+              greenDark: '#059669',
+              gold: '#D97706',       // Dorado elegante para diplomas/pergaminos
+              softBg: '#F8FAFC'
+            }
+          },
+          boxShadow: {
+            'glow-fuchsia': '0 10px 25px -5px rgba(230, 0, 126, 0.4)',
+            'glow-whatsapp': '0 8px 24px -4px rgba(16, 185, 129, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Efecto sutil de gradiente e iluminación */
+    .hero-glow {
+      background: radial-gradient(circle at 50% 20%, rgba(230, 0, 126, 0.08) 0%, rgba(10, 25, 49, 0) 70%);
+    }
+
+    /* =============================
+        CATÁLOGO 3D / PERSPECTIVE CAROUSEL
+        ============================= */
+    .catalog-wrap {
+      width: 100%;
+      position: relative;
+    }
+
+    .catalog-stage {
+      position: relative;
+      width: 100%;
+      max-width: 1120px;
+      height: 500px;
+      margin: 0 auto;
+      perspective: 1500px;
+      perspective-origin: 50% 50%;
+      overflow: hidden;
+    }
+
+    .catalog-stage::before,
+    .catalog-stage::after {
+      content: '';
+      position: absolute;
+      top: 34px;
+      bottom: 42px;
+      width: 18%;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .catalog-stage::before {
+      left: 0;
+      background: linear-gradient(to right, #fff 0%, rgba(255,255,255,0) 100%);
+    }
+
+    .catalog-stage::after {
+      right: 0;
+      background: linear-gradient(to left, #fff 0%, rgba(255,255,255,0) 100%);
+    }
+
+    .catalog-track {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .catalog-card {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      width: min(320px, 72vw);
+      height: 410px;
+      padding: 14px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(15, 23, 42, .08);
+      box-shadow: 0 24px 55px rgba(10, 25, 49, .14);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      transition: transform .72s cubic-bezier(.22,.61,.36,1), opacity .55s ease, filter .55s ease, box-shadow .55s ease;
+      overflow: hidden;
+    }
+
+    .catalog-card::after {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      border-radius: 29px;
+      pointer-events: none;
+      background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(255,255,255,0));
+      z-index: 0;
+    }
+
+    .catalog-card.is-active {
+      box-shadow: 0 34px 72px rgba(10, 25, 49, .22), 0 0 0 1px rgba(230,0,126,.08);
+    }
+
+    .catalog-card .catalog-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .catalog-visual {
+      position: relative;
+      height: 220px;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .catalog-visual::before,
+    .catalog-visual::after {
+      content: '';
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(2px);
+      opacity: .34;
+      z-index: -1;
+    }
+
+    .catalog-visual::before {
+      width: 180px;
+      height: 180px;
+      right: -50px;
+      top: -60px;
+      background: #E6007E;
+    }
+
+    .catalog-visual::after {
+      width: 160px;
+      height: 160px;
+      left: -60px;
+      bottom: -65px;
+      background: #10B981;
+    }
+
+    .catalog-copy {
+      padding: 18px 8px 2px;
+    }
+
+    .catalog-copy h3 {
+      margin: 0 0 7px;
+      color: #0A1931;
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    .catalog-copy p {
+      margin: 0;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .catalog-copy .catalog-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 13px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      color: #0A1931;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 800;
+      transition: color .2s ease;
+    }
+
+    .catalog-copy .catalog-link:hover { color: #E6007E; }
+
+    .catalog-controls {
+      position: relative;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .catalog-btn {
+      width: 44px;
+      height: 44px;
+      border: 1px solid #dbe4ee;
+      background: #fff;
+      color: #0A1931;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(10,25,49,.08);
+      transition: transform .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .catalog-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(230,0,126,.35);
+      color: #E6007E;
+    }
+
+    .catalog-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .catalog-dot {
+      width: 7px;
+      height: 7px;
+      border: 0;
+      padding: 0;
+      border-radius: 99px;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: width .25s ease, background .25s ease;
+    }
+
+    .catalog-dot.is-active {
+      width: 22px;
+      background: #E6007E;
+    }
+
+    .catalog-hint {
+      margin-top: 12px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 767px) {
+      .catalog-stage { height: 470px; }
+      .catalog-card { width: min(292px, 78vw); height: 392px; top: 28px; }
+      .catalog-visual { height: 208px; }
+      .catalog-stage::before, .catalog-stage::after { width: 12%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .catalog-card { transition: none; }
+      .catalog-btn, .catalog-dot { transition: none; }
+    }
+  </style>
+</head>
+<body class="bg-brand-softBg text-slate-800 font-sans antialiased selection:bg-brand-fuchsia selection:text-white pb-20 md:pb-0">
+
+  <!-- BARRA DE URGENCIA / BENEFICIO SUPERIOR -->
+  <div class="bg-brand-navy text-white text-xs sm:text-sm py-2 px-4 text-center font-medium border-b border-slate-800/80">
+    <span class="inline-flex items-center gap-1.5 flex-wrap justify-center">
+      <span class="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span>
+      <strong class="text-brand-fuchsia font-semibold">Campaña Escolar 2026:</strong> Cupos de producción limitados para ceremonias de fin de año.
+      <a href="#cotizacion" class="underline underline-offset-2 hover:text-brand-fuchsia ml-1 font-semibold">Reserva tu fecha aquí</a>
+    </span>
+  </div>
+
+  <!-- NAVEGACIÓN -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-brand-navy flex items-center justify-center text-white font-extrabold text-xl shadow-md">
+          G
+        </div>
+        <div>
+          <span class="block text-base font-extrabold text-brand-navy tracking-tight leading-none">Gráfica Arte Digital</span>
+          <span class="text-xs font-semibold text-brand-fuchsia uppercase tracking-wider">Publicidad Creativa</span>
+        </div>
+      </div>
+
+      <a href="https://wa.me/51999112465?text=Hola%20Gr%C3%A1fica%20Arte%20Digital,%20deseo%20cotizar%20productos%20para%20la%20clausura%20escolar." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold text-brand-navy border-2 border-brand-navy hover:bg-brand-navy hover:text-white transition-all duration-200">
+        <svg class="w-4 h-4 text-brand-green" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+        </svg>
+        WhatsApp Directo
+      </a>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION -->
+  <section class="relative hero-glow pt-8 pb-16 md:pt-16 md:pb-24 px-4 sm:px-6 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center">
+      
+      <div class="inline-flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm mb-6">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-fuchsia opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-fuchsia"></span>
+        </span>
+        <p class="text-xs font-bold text-slate-700">
+          Especialistas en Clausuras: Colegios, Nidos y Comités de Promoción
+        </p>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-brand-navy tracking-tight leading-tight md:leading-[1.15] mb-5">
+        Haz inolvidable la clausura escolar: <br class="hidden sm:inline">
+        <span class="bg-gradient-to-r from-brand-navy via-brand-navyLight to-brand-fuchsia bg-clip-text text-transparent">
+          Pergaminos, anuarios y recordatorios
+        </span>
+      </h1>
+
+      <p class="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+        Diseños personalizados, acabados de alta calidad y entrega puntual para que tu promoción brille en su día especial.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/51999112465?text=Hola%20Gr%C3%A1fica%20Arte%20Digital,%20necesito%20cotizaci%C3%B3n%20urgente%20para%20clausura%20escolar." target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-brand-fuchsia hover:bg-brand-fuchsiaHover text-white font-bold text-lg shadow-glow-fuchsia transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+          </svg>
+          Cotizar por WhatsApp al Instante
+        </a>
+        <a href="#servicios" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-slate-50 text-brand-navy font-bold text-sm border border-slate-200 transition-colors shadow-sm">
+          Ver Catálogo Rápido ↓
+        </a>
+      </div>
+
+      <div class="mt-6 flex items-center justify-center gap-6 text-xs text-slate-500 font-medium">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          Respuesta en &lt; 15 minutos
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          Envíos seguros
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. CATÁLOGO 3D INTERACTIVO -->
+  <section id="servicios" class="py-14 sm:py-18 bg-white border-y border-slate-100 px-4 sm:px-6 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center max-w-xl mx-auto mb-7">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-brand-fuchsia">Nuestros Productos Destacados</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-navy mt-1">Explora nuestro catálogo escolar</h2>
+        <p class="text-sm text-slate-500 mt-2">Desliza o usa los botones para conocer las opciones para tu ceremonia.</p>
+      </div>
+
+      <div class="catalog-wrap" aria-label="Catálogo de productos">
+        <div class="catalog-stage" id="catalogStage">
+          <div class="catalog-track" id="catalogTrack">
+
+            <!-- Card 1 -->
+            <article class="catalog-card" data-catalog-index="0">
+              <div class="catalog-inner">
+                <div class="catalog-visual bg-amber-50">
+                  <div class="text-center p-4">
+                    <span class="text-4xl">📜</span>
+                    <h4 class="font-bold text-brand-navy mt-2 text-sm">Diplomas de Honor</h4>
+                    <p class="text-xs text-slate-500">Papel couché mate / texturado</p>
+                  </div>
+                </div>
+                <div class="catalog-copy">
+                  <h3>Diplomas y Pergaminos</h3>
+                  <p>Diseños personalizados con sello dorado y laminado de alta protección.</p>
+                  <a href="https://wa.me/51999112465?text=Hola,%20deseo%20cotizar%20Diplomas%20para%20clausura." target="_blank" class="catalog-link">
+                    <span>Cotizar este producto</span>
+                    <span>→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="catalog-card" data-catalog-index="1">
+              <div class="catalog-inner">
+                <div class="catalog-visual bg-blue-50">
+                  <div class="text-center p-4">
+                    <span class="text-4xl">📚</span>
+                    <h4 class="font-bold text-brand-navy mt-2 text-sm">Recuerdos Gráficos</h4>
+                    <p class="text-xs text-slate-500">Impresión Full Color</p>
+                  </div>
+                </div>
+                <div class="catalog-copy">
+                  <h3>Anuarios y Revistas</h3>
+                  <p>Guarda los mejores momentos de la promoción con acabados profesionales.</p>
+                  <a href="https://wa.me/51999112465?text=Hola,%20deseo%20cotizar%20Anuarios%20escolares." target="_blank" class="catalog-link">
+                    <span>Cotizar este producto</span>
+                    <span>→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="catalog-card" data-catalog-index="2">
+              <div class="catalog-inner">
+                <div class="catalog-visual bg-pink-50">
+                  <div class="text-center p-4">
+                    <span class="text-4xl">🥇</span>
+                    <h4 class="font-bold text-brand-navy mt-2 text-sm">Reconocimiento</h4>
+                    <p class="text-xs text-slate-500">Medallas y Pines</p>
+                  </div>
+                </div>
+                <div class="catalog-copy">
+                  <h3>Medallas y Estuches</h3>
+                  <p>Distintivos metálicos con cinta personalizada para premiar el esfuerzo escolar.</p>
+                  <a href="https://wa.me/51999112465?text=Hola,%20deseo%20cotizar%20Medallas%20de%20promoci%C3%B3n." target="_blank" class="catalog-link">
+                    <span>Cotizar este producto</span>
+                    <span>→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="catalog-card" data-catalog-index="3">
+              <div class="catalog-inner">
+                <div class="catalog-visual bg-emerald-50">
+                  <div class="text-center p-4">
+                    <span class="text-4xl">🎓</span>
+                    <h4 class="font-bold text-brand-navy mt-2 text-sm">Packs Integrales</h4>
+                    <p class="text-xs text-slate-500">Todo incluido</p>
+                  </div>
+                </div>
+                <div class="catalog-copy">
+                  <h3>Packs Completos de Promoción</h3>
+                  <p>Incluye diploma, estuche, medalla y anuario con precio especial para comités.</p>
+                  <a href="https://wa.me/51999112465?text=Hola,%20deseo%20cotizar%20un%20Pack%20Completo%20de%20Promoci%C3%B3n." target="_blank" class="catalog-link">
+                    <span>Cotizar este producto</span>
+                    <span>→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="catalog-controls">
+          <button class="catalog-btn" id="catalogPrev" aria-label="Anterior">←</button>
+          <div class="catalog-dots" id="catalogDots"></div>
+          <button class="catalog-btn" id="catalogNext" aria-label="Siguiente">→</button>
+        </div>
+        <p class="catalog-hint">← Desliza para explorar más opciones →</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. SECCIÓN DE CONVERSIÓN / COTIZACIÓN RÁPIDA -->
+  <section id="cotizacion" class="py-16 px-4 sm:px-6 bg-brand-navy text-white text-center relative overflow-hidden">
+    <div class="max-w-3xl mx-auto relative z-10">
+      <span class="text-xs font-extrabold uppercase tracking-widest text-brand-fuchsia">Atención Directa para Comités</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">¿Listo para organizar la clausura perfecta?</h2>
+      <p class="text-slate-300 text-sm sm:text-base mb-8 max-w-xl mx-auto">
+        Envíanos las cantidad de alumnos y productos que necesitas. Validamos tus bocetos por WhatsApp de forma rápida y segura.
+      </p>
+
+      <a href="https://wa.me/51999112465?text=Hola%20Gr%C3%A1fica%20Arte%20Digital,%20quiero%20hacer%20una%20cotizaci%C3%B3n%20para%20mi%20colegio." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-brand-green hover:bg-brand-greenDark text-white font-bold text-lg shadow-glow-whatsapp transition-all transform hover:-translate-y-0.5">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+        </svg>
+        Hablar con un Asesor Ahora
+      </a>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-xs">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>&copy; 2026 Gráfica Arte Digital. Todos los derechos reservados.</p>
+      <p class="text-brand-fuchsia font-semibold">Campaña Escolar de Clausura 🎓</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT PARA EL CARRUSEL 3D -->
+  <script>
+    (function () {
+      const track = document.getElementById('catalogTrack');
+      if (!track) return;
+      const cards = Array.from(track.querySelectorAll('.catalog-card'));
+      const prevBtn = document.getElementById('catalogPrev');
+      const nextBtn = document.getElementById('catalogNext');
+      const dotsContainer = document.getElementById('catalogDots');
+      
+      let currentIndex = 0;
+      const totalCards = cards.length;
+
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'catalog-dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
+        dot.addEventListener('click', () => {
+          currentIndex = i;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = Array.from(dotsContainer.children);
+
+      function updateCarousel() {
+        const stageWidth = track.parentElement.clientWidth;
+        const isMobile = window.innerWidth < 768;
+        
+        cards.forEach((card, i) => {
+          let offset = (i - currentIndex + totalCards) % totalCards;
+          if (offset > totalCards / 2) offset -= totalCards;
+
+          const absOffset = Math.abs(offset);
+          const isActive = offset === 0;
+
+          card.classList.toggle('is-active', isActive);
+
+          let translateX = 0;
+          let translateZ = 0;
+          let rotateY = 0;
+          let opacity = 1;
+          let scale = 1;
+          let filter = 'blur(0px)';
+          let zIndex = 10 - absOffset;
+          let pointerEvents = isActive ? 'auto' : 'none';
+
+          if (isActive) {
+            translateX = -50; 
+            translateZ = 0;
+            rotateY = 0;
+            opacity = 1;
+            scale = 1;
+          } else {
+            const sign = offset < 0 ? -1 : 1;
+            const stepX = isMobile ? 120 : 190;
+            translateX = -50 + (sign * (isMobile ? 55 : 65));
+            translateZ = -220 - (absOffset * 80);
+            rotateY = sign * -25;
+            opacity = Math.max(0.25, 1 - (absOffset * 0.35));
+            scale = Math.max(0.75, 1 - (absOffset * 0.12));
+            filter = `blur(${absOffset * 1.5}px)`;
+          }
+
+          card.style.transform = `translate(-50%, 0) translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+          card.style.opacity = opacity;
+          card.style.filter = filter;
+          card.style.zIndex = zIndex;
+          card.style.pointerEvents = pointerEvents;
+        });
+
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('is-active', i === currentIndex);
+        });
+      }
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        updateCarousel();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateCarousel();
+      });
+
+      window.addEventListener('resize', updateCarousel);
+      updateCarousel();
+    })();
+  </script>
+</body>
+</html>
