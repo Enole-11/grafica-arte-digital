@@ -380,7 +380,7 @@
       </div>
 
       <!-- CTA de cabecera directo a WhatsApp -->
-      <a href="https://wa.me/?text=Hola%20Gr%C3%A1fica%20Arte%20Digital,%20deseo%20cotizar%20productos%20para%20la%20clausura%20escolar." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold text-brand-navy border-2 border-brand-navy hover:bg-brand-navy hover:text-white transition-all duration-200">
+      <a href="#" class="btn-wsp bg-brand-fuchsia text-white px-4 py-2 rounded-lg" data-mensaje="Hola Gráfica Arte Digital, deseo solicitar información general.">
         <svg class="w-4 h-4 text-brand-green" fill="currentColor" viewBox="0 0 24 24">
           <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
         </svg>
@@ -903,5 +903,15 @@
       }, 500);
     }
   </script>
+  <script>
+  const numeroTelefono = "51998897105"; 
+
+  document.querySelectorAll('.btn-wsp').forEach(elemento => {
+    const mensaje = elemento.getAttribute('data-mensaje') || "Hola, deseo información sobre sus productos.";
+    elemento.href = `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+    elemento.target = "_blank";
+    elemento.rel = "noopener noreferrer";
+  });
+</script>
 </body>
 </html>
